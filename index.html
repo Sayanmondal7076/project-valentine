@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Do You Love Me?</title>
+    <style>
+      /* CSS from style.css is now embedded here */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: sans-serif;
+      }
+      body {
+        width: 100%;
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #ffe5e5;
+      }
+      .container {
+        display: flex;
+        flex-direction: column;
+        text-align: center;
+        align-items: center;
+        gap: 20px;
+        max-width: 500px;
+        margin: 20px;
+      }
+      .container .tenor-gif-embed {
+        max-width: 200px;
+        width: 100%;
+      }
+      .container .btn {
+        display: flex;
+        gap: 25px;
+      }
+      .btn a {
+        text-decoration: none;
+        color: #111;
+        background: #fff;
+        padding: 10px 25px;
+        border-radius: 8px;
+        box-shadow: 0.5rem 1rem 3rem rgba(0, 0, 0, 0.3);
+        transition: all 0.3s ease;
+      }
+      #move-random {
+        position: absolute;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div
+        id="gif-container"
+        class="tenor-gif-embed"
+        data-postid="22885016"
+        data-share-method="host"
+        data-aspect-ratio="1.04918"
+        data-width="100%"
+      >
+        <a href="https://tenor.com/view/manja-gif-22885016">Manja Sticker</a>
+        from
+        <a href="https://tenor.com/search/manja-stickers">Manja Stickers</a>
+      </div>
+      <h1 id="question-text">DO you love me? 🤗</h1>
+      <p id="sub-text">~Sayan is all yours</p>
+      <div class="btn">
+        <a href="#" id="yes-btn">Yes</a>
+        <a href="#" id="no-btn">No</a>
+      </div>
+    </div>
+
+    <script>
+      // Data for each state of the "No" sequence
+      const states = [
+        {
+          // Initial state (index.html)
+          gifId: "22885016",
+          gifLink: "https://tenor.com/view/manja-gif-22885016",
+          gifName: "Manja Sticker",
+          stickerLink: "https://tenor.com/search/manja-stickers",
+          stickerName: "Manja Stickers",
+          aspectRatio: "1.04918",
+          h1: "DO you love me? 🤗",
+          p: "~Sayan is all yours",
+        },
+        {
+          // no1.html
+          gifId: "22050818",
+          gifLink: "https://tenor.com/view/mochi-gif-22050818",
+          gifName: "Mochi Sticker",
+          stickerLink: "https://tenor.com/search/mochi-stickers",
+          stickerName: "Mochi Stickers",
+          aspectRatio: "1",
+          h1: "Please think again! 🙄",
+          p: "itni jaldi nahi matt bolo😥",
+        },
+        {
+          // no2.html
+          gifId: "15195810",
+          gifLink:
+            "https://tenor.com/view/couple-forgive-me-asking-for-forgiveness-begging-crying-gif-15195810",
+          gifName: "Couple Forgive Me Sticker",
+          stickerLink: "https://tenor.com/search/couple-stickers",
+          stickerName: "Couple Stickers",
+          aspectRatio: "1",
+          h1: "Ek aur baar Soch lo! 😣",
+          p: "kyu aisa kar rahi ho 😣",
+        },
+        {
+          // no3.html (runaway button)
+          gifId: "15974530976611222074",
+          gifLink:
+            "https://tenor.com/view/peach-goma-phone-gif-15974530976611222074",
+          gifName: "Peach Goma Phone Sticker",
+          stickerLink: "https://tenor.com/search/peach+goma-stickers",
+          stickerName: "Peach Goma Stickers",
+          aspectRatio: "1.26923",
+          h1: "Baby Man jao na! Kitna bhav khaogi 😭",
+          p: "bhut glt baat hai yaar😭",
+        },
+      ];
+
+      // Data for the final "Yes" page
+      const yesState = {
+        gifId: "253027946666209433",
+        gifLink:
+          "https://tenor.com/view/mochi-cat-mochi-and-goma-goma-and-peach-mochi-mochi-peach-cat-gif-gif-253027946666209433",
+        gifName: "Mochi Cat GIF",
+        stickerLink: "https://tenor.com/search/mochi-gifs",
+        stickerName: "Mochi GIFs",
+        aspectRatio: "1.37853",
+        h1: "Hehehehe, I knew it! Love you a lot 😘",
+        p: "",
+      };
+
+      const yesBtn = document.getElementById("yes-btn");
+      const noBtn = document.getElementById("no-btn");
+      const gifContainer = document.getElementById("gif-container");
+      const h1 = document.getElementById("question-text");
+      const p = document.getElementById("sub-text");
+      const btnContainer = document.querySelector(".btn");
+
+      let currentState = 0;
+
+      // Function to update page content based on state
+      function updatePage(state) {
+        gifContainer.dataset.postid = state.gifId;
+        gifContainer.dataset.aspectRatio = state.aspectRatio;
+        gifContainer.innerHTML = `<a href="${state.gifLink}">${state.gifName}</a> from <a href="${state.stickerLink}">${state.stickerName}</a>`;
+        h1.textContent = state.h1;
+        p.textContent = state.p;
+
+        // Re-initialize Tenor script to load new GIF
+        if (window.Tenor) {
+          window.Tenor.reload();
+        }
+      }
+
+      // Event listener for the "No" button
+      noBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+        currentState++;
+
+        if (currentState < states.length) {
+          updatePage(states[currentState]);
+          if (currentState === states.length - 1) {
+            // Last "No" state, activate runaway button
+            noBtn.removeEventListener("click", arguments.callee); // Stop listening for clicks
+            noBtn.id = "move-random"; // Change ID for runaway logic
+            noBtn.addEventListener("mouseenter", moveRandomEl);
+          }
+        }
+      });
+
+      // Event listener for the "Yes" button
+      yesBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+        updatePage(yesState);
+        btnContainer.style.display = "none"; // Hide buttons on 'yes'
+      });
+
+      // Function to move the "No" button randomly
+      function moveRandomEl(e) {
+        const elm = e.target;
+        elm.style.top = Math.floor(Math.random() * 90 + 5) + "%";
+        elm.style.left = Math.floor(Math.random() * 90 + 5) + "%";
+      }
+
+      // External script for Tenor GIFs, loaded once
+      const tenorScript = document.createElement("script");
+      tenorScript.type = "text/javascript";
+      tenorScript.async = true;
+      tenorScript.src = "https://tenor.com/embed.js";
+      document.body.appendChild(tenorScript);
+    </script>
+  </body>
+</html>
