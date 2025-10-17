@@ -160,8 +160,8 @@
         }
       }
 
-      // Event listener for the "No" button
-      noBtn.addEventListener("click", (e) => {
+      // Change starts here: Define a named function for the 'No' button logic
+      function handleNoClick(e) {
         e.preventDefault();
         currentState++;
 
@@ -169,12 +169,16 @@
           updatePage(states[currentState]);
           if (currentState === states.length - 1) {
             // Last "No" state, activate runaway button
-            noBtn.removeEventListener("click", arguments.callee); // Stop listening for clicks
+            noBtn.removeEventListener("click", handleNoClick); // Correctly remove the listener
             noBtn.id = "move-random"; // Change ID for runaway logic
             noBtn.addEventListener("mouseenter", moveRandomEl);
           }
         }
-      });
+      }
+      // Change ends here
+
+      // Event listener for the "No" button
+      noBtn.addEventListener("click", handleNoClick); // Add the named function as the listener
 
       // Event listener for the "Yes" button
       yesBtn.addEventListener("click", (e) => {
